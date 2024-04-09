@@ -1,0 +1,52 @@
+<!-- Button trigger modal -->
+<button
+  (click)="openModal()"
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#modal"
+>
+  Insert record
+</button>
+
+<!-- Modal to insert a new value -->
+<div
+  class="modal fade"
+  id="modal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel">
+          Insert new record
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-insert-record
+          #insertRecordComponent
+          [games]="games"
+          [userGameRecord]="userGameRecord"
+          (attemptInserted)="attemptInserted($event)"
+        ></app-insert-record>
+      </div>
+      <div class="modal-footer">
+        <button id="close-button" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button (click)="insertRecord()" type="button" class="btn btn-primary">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal to insert a new value -->

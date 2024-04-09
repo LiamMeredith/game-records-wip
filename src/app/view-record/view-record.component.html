@@ -1,0 +1,7 @@
+<div class="option-grid">
+  <div *ngFor="let row of attempt" class="option-row">
+    <div *ngFor="let cell of row" class="option-cell option-cell-{{ cell }}">
+      <i [class]="optionValueIcon[cell]" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>

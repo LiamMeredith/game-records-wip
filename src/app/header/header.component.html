@@ -1,0 +1,30 @@
+<nav
+  class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+>
+  <h1 class="ml-2 h3 mb-0 text-gray-800">Dashboard</h1>
+  <ng-container *ngIf="authenticated">
+    <span class="mr-2 d-none d-lg-inline text-gray-600 small ml-auto">{{
+      user.name
+    }}</span>
+    <div class="dropdown h-100 mr-2 dropstart">
+      <img
+        class="img-profile rounded-circle dropdown-toggle h-100"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        [src]="user.picture"
+      />
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" (click)="logout.emit()">Log out</a></li>
+      </ul>
+    </div>
+  </ng-container>
+  <button
+    *ngIf="!authenticated"
+    (click)="signIn.emit()"
+    type="button"
+    class="btn btn-primary"
+  >
+    Log in
+  </button>
+</nav>

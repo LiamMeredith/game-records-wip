@@ -1,0 +1,35 @@
+<ng-container *ngIf="!errorMessage; else errorMessageTemplate">
+  <div *ngIf="attempt.length === 0; else showAttempt" class="mb-3">
+    <label for="recordInput" class="form-label">Paste new record!</label>
+    <textarea
+      [(ngModel)]="text"
+      (paste)="onPaste()"
+      class="form-control"
+      id="recordInput"
+      rows="3"
+    ></textarea>
+  </div>
+  <ng-template #showAttempt>
+    <div>
+      <label class="form-label"
+        >{{ game?.name }} detected with {{ attempt.length }} attempts</label
+      >
+      <app-view-record [attempt]="attempt"></app-view-record>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #errorMessageTemplate>
+  <div class="alert alert-danger d-flex" role="alert">
+    <div class="flex-grow-1">
+      {{ errorMessage }}
+    </div>
+
+    <small
+      (click)="clearValues()"
+      type="button"
+      class="btn-close ml-auto mt-auto"
+      aria-label="Close"
+    ></small>
+  </div>
+</ng-template>

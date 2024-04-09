@@ -1,0 +1,5 @@
+{
+  "domain": "dev-1iz120kloyfqd3hu.us.auth0.com",
+  "clientId": "rHOEMfblvhk0QFS9lEA5MmpZrB1IHjTW",
+  "audience": "https://smashdle-scores.hasura.app/v1/graphql"
+}

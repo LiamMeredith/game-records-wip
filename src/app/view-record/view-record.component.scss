@@ -1,0 +1,40 @@
+.option-grid {
+  .option-row {
+    width: fit-content;
+    margin: auto;
+
+    .option-cell {
+      margin: 3px;
+      border: 1px solid black;
+      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      color: white;
+
+      i {
+        margin: auto;
+      }
+
+      &-green{
+        background: #16c60c;
+      }
+
+      &-red{
+        background: #e81224;
+      }
+
+      &-yellow{
+        background:#f7630c;
+      }
+
+      &-up{
+        background: #0078d7;
+      }
+
+      &-down{
+        background: #0078d7;
+      }
+    }
+  }
+}

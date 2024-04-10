@@ -2,6 +2,21 @@
   max-width: 500px;
 }
 
+.card {
+  width: fit-content;
+  width: 400px;
+  img {
+    width: 400px;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .combined-title {
+    width: fit-content;
+    margin: auto;
+  }
+}
+
 .loading-background {
   background: var(--bs-primary);
   height: 100vh;

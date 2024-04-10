@@ -6,35 +6,31 @@
     .option-cell {
       margin: 3px;
       border: 1px solid black;
-      border-radius: 6px;
-      width: 24px;
-      height: 24px;
+      border-radius: 4px;
+      width: 30px;
+      height: 30px;
       display: inline-flex;
       color: white;
 
       i {
         margin: auto;
       }
-
-      &-green{
-        background: #16c60c;
-      }
-
-      &-red{
-        background: #e81224;
-      }
-
-      &-yellow{
-        background:#f7630c;
-      }
-
-      &-up{
-        background: #0078d7;
-      }
-
-      &-down{
-        background: #0078d7;
-      }
     }
   }
+}
+
+.bg-success {
+  border-color: var(--bs-success-text-emphasis) !important;
+}
+
+.bg-danger {
+  border-color: var(--bs-danger-text-emphasis) !important;
+}
+
+.bg-warning {
+  border-color: var(--bs-warning-text-emphasis) !important;
+}
+
+.bg-info {
+  border-color: var(--bs-info-text-emphasis) !important;
 }

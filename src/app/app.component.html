@@ -26,17 +26,25 @@
     ></app-header>
 
     <!-- Begin Page Content -->
-    <div class="d-flex border-end border-secondary">
+    <div class="d-flex border-end p-4">
       <div class="flex-grow-1 text-center">
         <ng-container *ngIf="userGameRecord">
           <ng-container *ngFor="let gameAttempts of gameAttempts">
-            <ng-container *ngIf="gameAttempts.attempts">
-              <div>You have found the {{ gameAttempts.game.name }}</div>
-              <app-view-record
-                class="d-block mb-3"
-                [attempt]="gameAttempts.attempts"
-              ></app-view-record>
-            </ng-container>
+            <div *ngIf="gameAttempts.attempts" class="card mx-auto mb-5">
+              <img [src]="gameCovers[gameAttempts.game.name]" class="card-img-top">
+              <div class="card-body">
+                <div class="combined-title mb-3">
+                  <h5 class="card-title">
+                    You have found the {{ gameAttempts.game.name }}
+                  </h5>
+                  <h6 class="card-subtitle text-muted text-left">It took {{gameAttempts.attempts.length}} attempt/s</h6>
+                </div>
+                <app-view-record
+                  class="d-block mb-3"
+                  [attempt]="gameAttempts.attempts"
+                ></app-view-record>
+              </div>
+            </div>
           </ng-container>
         </ng-container>
 
@@ -50,7 +58,10 @@
 
       <div class="ranks p-3">
         <h3>Ranks!</h3>
-        <div *ngFor="let rank of ranking; let index = index">{{index + 1}}. {{ rank.userName }} is in {{ rank.positionLabel }} position!</div>
+        <div *ngFor="let rank of ranking; let index = index">
+          {{ index + 1 }}. {{ rank.userName }} is in
+          {{ rank.positionLabel }} position!
+        </div>
       </div>
     </div>
     <!-- /.container-fluid -->

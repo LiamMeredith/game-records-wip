@@ -26,18 +26,26 @@
     ></app-header>
 
     <!-- Begin Page Content -->
-    <div class="d-flex border-end p-4">
-      <div class="flex-grow-1 text-center">
+    <div class="main-body border-end p-4">
+      <div class="text-center d-flex flex-wrap justify-content-evenly">
         <ng-container *ngIf="userGameRecord">
-          <ng-container *ngFor="let gameAttempts of gameAttempts">
-            <div *ngIf="gameAttempts.attempts" class="card mx-auto mb-5">
-              <img [src]="gameCovers[gameAttempts.game.name]" class="card-img-top">
+          <div
+            *ngFor="let gameAttempts of gameAttempts"
+            class="p-3 d-inline-flex"
+          >
+            <div *ngIf="gameAttempts.attempts" class="card shadow mx-auto">
+              <img
+                [src]="gameCovers[gameAttempts.game.name]"
+                class="card-img-top"
+              />
               <div class="card-body">
                 <div class="combined-title mb-3">
                   <h5 class="card-title">
                     You have found the {{ gameAttempts.game.name }}
                   </h5>
-                  <h6 class="card-subtitle text-muted text-left">It took {{gameAttempts.attempts.length}} attempt/s</h6>
+                  <h6 class="card-subtitle text-muted text-left">
+                    It took {{ gameAttempts.numberOfAttempts }} attempt/s
+                  </h6>
                 </div>
                 <app-view-record
                   class="d-block mb-3"
@@ -45,15 +53,17 @@
                 ></app-view-record>
               </div>
             </div>
-          </ng-container>
+          </div>
         </ng-container>
-
-        <app-daily-score
-          [games]="games"
-          [userAttempts]="gameAttempts"
-          [(userGameRecord)]="userGameRecord"
-          (userGameRecordChange)="updateAttemptsView()"
-        ></app-daily-score>
+        <div class="p-3 d-inline-flex daily-score">
+          <app-daily-score
+            class="m-auto"
+            [games]="games"
+            [userAttempts]="gameAttempts"
+            [(userGameRecord)]="userGameRecord"
+            (userGameRecordChange)="updateAttemptsView()"
+          ></app-daily-score>
+        </div>
       </div>
 
       <div class="ranks p-3">

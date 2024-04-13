@@ -34,6 +34,7 @@ export type GameAttempts = Record<string, OptionValues[][]>;
 export interface UserGameAttempts {
   game: Game;
   attempts: OptionValues[][];
+  numberOfAttempts: number;
 }
 
 export enum OptionValues {
@@ -42,9 +43,10 @@ export enum OptionValues {
   YELLOW = "yellow",
   UP = "up",
   DOWN = "down",
+  PLUS = "plus",
 }
 
-export const emojiValues = ["🟩", "🟥", "🟧", "⬆️", "⬇️"];
+export const emojiValues = ["🟩", "🟥", "🟧", "⬆️", "⬇️", "➕"];
 
 export const optionValuesIconConversion: Record<string, string> = {
   [OptionValues.GREEN]: "🟩",

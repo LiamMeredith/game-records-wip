@@ -39,7 +39,7 @@ export class AppComponent {
     Pokedle:
       "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/db781c2f-75f5-4db4-8e6a-75c2c542f51a/dah6qdl-32014297-e5c7-453c-9b8e-9df9c7b5f7ff.png/v1/fill/w_1024,h_607,q_80,strp/pokemon_gen_1_wallpaper_by_themightybattlesquid_dah6qdl-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjA3IiwicGF0aCI6IlwvZlwvZGI3ODFjMmYtNzVmNS00ZGI0LThlNmEtNzVjMmM1NDJmNTFhXC9kYWg2cWRsLTMyMDE0Mjk3LWU1YzctNDUzYy05YjhlLTlkZjljN2I1ZjdmZi5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.BXansCHupA_lJ6EriX1AaDoetnzLbQmRYpcYAP5Yh_k",
     Smashdle:
-      "https://assetsio.gnwcdn.com/super-smash-bros-ultimate-review-a-messy-magical-festival-of-video-games-1544191164582.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
+      "https://assetsio.gnwcdn.com/super-smash-bros-ultimate-review-a-messy-magical-festival-of-video-games-1544191164582.jpg",
   };
   // Loader manager to load the fade out properties
   public loading = true;
@@ -116,6 +116,7 @@ export class AppComponent {
     this.gameAttempts = this.games.map((game) => ({
       game,
       attempts: this.userGameRecord.attemptsPatterns[game.name],
+      numberOfAttempts: (this.userGameRecord as any)[game.name.toLowerCase() + "Attempts"],
     }));
   }
 

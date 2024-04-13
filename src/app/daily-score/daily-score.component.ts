@@ -31,6 +31,7 @@ export class DailyScoreComponent {
 
   public attempts: GameAttempts = {};
   public game: Game | null = null;
+  public numberOfAttempts = 0;
 
   constructor(private smashdleService: SmashdleService) {}
 
@@ -39,15 +40,20 @@ export class DailyScoreComponent {
   }
 
   public attemptInserted(
-    gameAttempt: { game: Game; attempt: OptionValues[][] } | null,
+    gameAttempt: {
+      game: Game;
+      attempt: OptionValues[][];
+      numberOfAttempts: number;
+    } | null,
   ): void {
     if (!gameAttempt) {
       return;
     }
 
-    const { game, attempt } = gameAttempt;
+    const { game, attempt, numberOfAttempts } = gameAttempt;
     this.game = game;
     this.attempts[game.name] = attempt;
+    this.numberOfAttempts = numberOfAttempts;
   }
 
   public async insertRecord(): Promise<void> {
@@ -56,7 +62,7 @@ export class DailyScoreComponent {
     }
 
     (this.userGameRecord as any)[this.game.name.toLowerCase() + "Attempts"] =
-      this.attempts[this.game.name].length;
+      this.numberOfAttempts;
     this.userGameRecord.attemptsPatterns[this.game.name] =
       this.attempts[this.game.name];
 
@@ -67,7 +73,7 @@ export class DailyScoreComponent {
 
     this.userGameRecord = await firstValueFrom(saveRecord$);
 
-    document.getElementById('close-button')?.click();
+    document.getElementById("close-button")?.click();
 
     this.userGameRecordChange.emit(this.userGameRecord);
   }

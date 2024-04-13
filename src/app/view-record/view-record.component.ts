@@ -15,6 +15,7 @@ export class ViewRecordComponent {
     [OptionValues.YELLOW]: 'fa fa-exclamation',
     [OptionValues.UP]: 'fa fa-arrow-up',
     [OptionValues.DOWN]: 'fa fa-arrow-down',
+    [OptionValues.PLUS]: 'fa fa-plus',
   };
 
   public optionValueBg: Record<string, string> = {
@@ -23,5 +24,6 @@ export class ViewRecordComponent {
     [OptionValues.YELLOW]: 'bg-warning',
     [OptionValues.UP]: 'bg-info',
     [OptionValues.DOWN]: 'bg-info',
+    [OptionValues.PLUS]: 'bg-secondary',
   };
 }

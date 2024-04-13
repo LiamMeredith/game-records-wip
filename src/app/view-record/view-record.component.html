@@ -1,7 +1,15 @@
 <div class="option-grid">
   <div *ngFor="let row of attempt" class="option-row">
-    <div *ngFor="let cell of row" class="option-cell {{optionValueBg[cell]}}">
-      <i [class]="optionValueIcon[cell]" aria-hidden="true"></i>
+    <div
+      *ngFor="let cell of row"
+      class="option-cell {{ optionValueBg[cell] ?? 'bg-dark' }}"
+    >
+      <i
+        *ngIf="optionValueIcon[cell]"
+        [class]="optionValueIcon[cell]"
+        aria-hidden="true"
+      ></i>
+      <span *ngIf="!optionValueIcon[cell]" class="more-number">{{ cell }}</span>
     </div>
   </div>
 </div>

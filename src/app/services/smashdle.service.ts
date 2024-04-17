@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, map } from "rxjs";
-import { Game, GameRecord } from "../models/smashdle.models";
+import { Game, GameRecord, GameUser } from "../models/smashdle.models";
 
 @Injectable({
   providedIn: "root",
@@ -18,6 +18,16 @@ export class SmashdleService {
             ...gameRecord,
             userName: gameRecord.User.userName,
           })),
+        ),
+      );
+  }
+
+  public getUsers(): Observable<GameUser[]> {
+    return this.http
+      .get<Game[]>("https://smashdle-scores.hasura.app/api/rest/users")
+      .pipe(
+        map((response: any) =>
+          response.users.map((user: any) => new GameUser(user)),
         ),
       );
   }

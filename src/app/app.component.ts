@@ -1,15 +1,20 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { Subscription, firstValueFrom } from "rxjs";
 import { SmashdleService } from "./services/smashdle.service";
-import { Game, GameRecord, UserGameAttempts } from "./models/smashdle.models";
+import {
+  Game,
+  GameRecord,
+  GameUser,
+  UserGameAttempts,
+} from "./models/smashdle.models";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   // Current User stored in the Auth0 library
   public user: User | null = null;
   // Auth0 flag representing if user is authenticated
@@ -20,13 +25,16 @@ export class AppComponent {
   public gameRecords: GameRecord[] = [];
   // Selected game record for the current user
   public userGameRecord: GameRecord = new GameRecord();
+  // All users from HAsura database
+  public gameUsers: GameUser[] = [];
   // Selected users' attempts for the selected user game record
   public gameAttempts: UserGameAttempts[] = [];
   // Order list of user game attempts
-  public ranking: (GameRecord & {
-    totalAttempts: number;
-    positionLabel: string;
-  })[] = [];
+  public rankings: Record<
+    string,
+    Record<string, { userName: string; attempts: number; label: string }>
+  > = {};
+  public rankSorting: { type: string; userIds: string[] }[] = [];
   // Rank label for the DOM
   public readonly rankPosition = [
     "First",
@@ -45,6 +53,8 @@ export class AppComponent {
   public loading = true;
   // Loader manage to remove the panel from the DOM
   public showLoadingPanel = true;
+  // High number to add at the end of the sorting
+  public readonly NO_RANK_POSITION = 1000;
   // Internal subscription list for un-subscription management
   private subscriptionList: Subscription[] = [];
 
@@ -53,6 +63,12 @@ export class AppComponent {
     public smashdleService: SmashdleService,
   ) {
     this.init();
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptionList.forEach((subscription) =>
+      subscription?.unsubscribe(),
+    );
   }
 
   /**
@@ -73,21 +89,11 @@ export class AppComponent {
 
     this.user = (await firstValueFrom(this.auth.user$)) ?? null;
     this.games = (await firstValueFrom(this.smashdleService.getGames())) ?? [];
+    this.gameUsers = await firstValueFrom(this.smashdleService.getUsers());
 
     this.gameRecords = await firstValueFrom(this.smashdleService.getRecords());
-    this.ranking = this.gameRecords.map((gameRecord) => ({
-      ...new GameRecord(gameRecord),
-      totalAttempts: gameRecord.pokedleAttempts + gameRecord.smashdleAttempts,
-      positionLabel: "",
-    }));
-    this.ranking.sort(
-      (gameRecordA, gameRecordB) =>
-        gameRecordA.totalAttempts - gameRecordB.totalAttempts,
-    );
 
-    this.ranking.forEach((rank, index) => {
-      rank.positionLabel = this.rankPosition[index];
-    });
+    this.updateRanking();
 
     const userGameRecord =
       this.gameRecords.find(
@@ -112,12 +118,77 @@ export class AppComponent {
     }, 500);
   }
 
+  public updateRanking(): void {
+    const ranks: Record<
+      string,
+      Record<string, { userName: string; attempts: number; label: string }>
+    > = {};
+
+    const gameAttemptsKeys: { id: string; key: keyof GameRecord }[] = [];
+
+    this.games.forEach((game) => {
+      ranks[game.name] = {};
+      gameAttemptsKeys.push({
+        id: game.name,
+        key: (game.name.toLocaleLowerCase() + "Attempts") as keyof GameRecord,
+      });
+      this.gameUsers.forEach((user) => {
+        ranks[game.name][user.userId] = {
+          userName: user.userName,
+          attempts: this.NO_RANK_POSITION,
+          label: "",
+        };
+      });
+    });
+    ranks["General"] = {};
+    this.gameUsers.forEach((user) => {
+      ranks["General"][user.userId] = {
+        userName: user.userName,
+        attempts: this.NO_RANK_POSITION,
+        label: "",
+      };
+    });
+
+    this.gameRecords.forEach((gameRecord) => {
+      let totalAttempts = 0;
+      gameAttemptsKeys.forEach(({ id, key }) => {
+        const gameAttempt = (gameRecord[key] ?? 0) as number;
+        totalAttempts += gameAttempt;
+        ranks[id][gameRecord.userId].attempts = gameAttempt;
+      });
+      ranks["General"][gameRecord.userId].attempts =
+        totalAttempts !== 0 ? totalAttempts : this.NO_RANK_POSITION;
+    });
+
+    this.rankSorting = Object.keys(ranks).map((type) => ({
+      type,
+      userIds: Object.keys(ranks[type]),
+      label: "",
+    }));
+
+    this.rankSorting.forEach((rank) => {
+      rank.userIds.sort(
+        (userA, userB) =>
+          ranks[rank.type][userA].attempts - ranks[rank.type][userB].attempts,
+      );
+      rank.userIds.forEach((userId, index) => {
+        const positionRank = ranks[rank.type][userId];
+        positionRank.label = this.rankPosition[index];
+      });
+    });
+
+    this.rankings = ranks;
+  }
+
   public updateAttemptsView(): void {
     this.gameAttempts = this.games.map((game) => ({
       game,
       attempts: this.userGameRecord.attemptsPatterns[game.name],
-      numberOfAttempts: (this.userGameRecord as any)[game.name.toLowerCase() + "Attempts"],
+      numberOfAttempts: (this.userGameRecord as any)[
+        game.name.toLowerCase() + "Attempts"
+      ],
     }));
+    this.updateRanking();
   }
 
   public signIn(): void {

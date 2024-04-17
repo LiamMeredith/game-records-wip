@@ -68,9 +68,17 @@
 
       <div class="ranks p-3">
         <h3>Ranks!</h3>
-        <div *ngFor="let rank of ranking; let index = index">
-          {{ index + 1 }}. {{ rank.userName }} is in
-          {{ rank.positionLabel }} position!
+        <div *ngFor="let rankingSorted of rankSorting" class="card shadow">
+          <div *ngFor="let userId of rankingSorted.userIds">
+            <ng-container *ngIf="rankings[rankingSorted.type][userId] as rank">
+              <ng-container
+                *ngIf="rank.attempts !== NO_RANK_POSITION; else noRank"
+                >{{ rank.userName }} is in {{ rank.label }} place with
+                {{ rank.attempts }} attempts</ng-container
+              >
+              <ng-template #noRank>{{ rank.userName }} ---</ng-template>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>

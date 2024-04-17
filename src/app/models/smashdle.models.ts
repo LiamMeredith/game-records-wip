@@ -30,6 +30,18 @@ export class GameRecord {
   }
 }
 
+export class GameUser {
+  public userId: string;
+  public userName: string;
+  public lastSeen: string;
+
+  constructor(data: any = {}) {
+    this.userId = data.userId;
+    this.userName = data.userName;
+    this.lastSeen = data.lastSeen;
+  }
+}
+
 export type GameAttempts = Record<string, OptionValues[][]>;
 export interface UserGameAttempts {
   game: Game;

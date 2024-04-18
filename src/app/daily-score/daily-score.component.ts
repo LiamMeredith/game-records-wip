@@ -29,6 +29,8 @@ export class DailyScoreComponent {
   @Input() public userGameRecord!: GameRecord;
   @Output() public userGameRecordChange = new EventEmitter<GameRecord>();
 
+  public localUserAttempts: UserGameAttempts[] = [];
+
   public attempts: GameAttempts = {};
   public game: Game | null = null;
   public numberOfAttempts = 0;
@@ -37,6 +39,11 @@ export class DailyScoreComponent {
 
   public openModal(): void {
     this.insertRecordComponent.clearValues();
+    this.localUserAttempts = [];
+  }
+
+  public processText(): void {
+    this.localUserAttempts = this.insertRecordComponent.processText();
   }
 
   public attemptInserted(
@@ -57,14 +64,13 @@ export class DailyScoreComponent {
   }
 
   public async insertRecord(): Promise<void> {
-    if (!this.game || !this.userGameRecord) {
-      return;
-    }
-
-    (this.userGameRecord as any)[this.game.name.toLowerCase() + "Attempts"] =
-      this.numberOfAttempts;
-    this.userGameRecord.attemptsPatterns[this.game.name] =
-      this.attempts[this.game.name];
+    this.localUserAttempts.forEach((userAttempt) => {
+      (this.userGameRecord as any)[
+        userAttempt.game.name.toLowerCase() + "Attempts"
+      ] = userAttempt.numberOfAttempts;
+      this.userGameRecord.attemptsPatterns[userAttempt.game.name] =
+        userAttempt.attempts;
+    });
 
     const saveRecord$ =
       this.userAttempts.length === 0
